@@ -25,6 +25,7 @@
 #include <mockcpp/Asserter.h>
 #include <mockcpp/Invocation.h>
 #include <mockcpp/ArgumentsMacroHelpers.h>
+#include <mockcpp/InvokableTraits.h>
 
 MOCKCPP_NS_START
 
@@ -186,6 +187,18 @@ VARDIC_PROC_STUB_DEF(8);
 #define PROC(function) function, #function
 
 /////////////////////////////////////////////////////
+
+#if __cplusplus >= 201103L
+
+/* for stateless lambda */
+template <typename F>
+Stub* invoke(F &&f)
+{
+    using InvokableType = typename InvokableTrait<F>::InvokableType;
+    return invoke(static_cast<InvokableType>(f), nullptr);
+}
+
+#endif // #if __cplusplus >= 201103L
 
 MOCKCPP_NS_END
 

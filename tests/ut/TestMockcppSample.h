@@ -18,6 +18,11 @@ int func_stub()
     return 1000;
 }
 
+int GetCode(int id)
+{
+    return 0;
+}
+
 struct Interface2
 {
     virtual ~Interface2(){}
@@ -109,6 +114,14 @@ FIXTURE(mockcpp_sample, mockcpp samples)
         ASSERT_EQ(100, mocker->method1(10));
         ASSERT_EQ(24, sizeof(Derived));
         ASSERT_EQ(8, sizeof(void*));
+    }
+
+    TEST(stub with stateless lambda)
+    {
+        MOCKER(GetCode).stubs().will(invoke([](int id) { return id + 1; }));
+
+        ASSERT_EQ(GetCode(1), 2);
+        ASSERT_EQ(GetCode(2), 3);
     }
 
 #if 0
